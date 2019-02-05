@@ -42,3 +42,21 @@ def calc_corr(data, orth = True):
 					corr_matrix[i1, i2, j1, j2] = r2
 
 	return corr_matrix
+
+def count_leading_trailing_true(arr):
+	lead_count = 0
+	trail_count = 0
+
+	for i in range(arr.size):
+		if arr[i]:
+			lead_count += 1
+		else:
+			break
+
+	for i in range(arr.size):
+		if arr[::-1][i]:
+			trail_count +=1
+		else:
+			break
+
+	return lead_count, trail_count

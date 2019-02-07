@@ -54,6 +54,12 @@ if __name__ == '__main__':
 	parser.add_argument('-t', '--test', action = 'store_true')
 
 
+	# Interactive execution: Execute the job given by job_index interactively
+	# instead of submitting into the slurm queue
+	parser.add_argument('-i', '--interactive', action = 'store_true')
+	# Job index (corresponds to jobnum) to launch interactively
+	parser.add_argument('--iidx', default = 0)
+
 	args = parser.parse_args()
 	
 	script_dir = '/global/homes/a/akumar25/ACTIV'
@@ -101,6 +107,13 @@ if __name__ == '__main__':
 
 		if getattr(args, jobtype):
 
+			# Run the job interactively rather than creating all the sbatch scripts
+			if args.interactive:
+				os.system('python %s/eeg_corr.py %s %s %s %d'
+				% (script_dir, data_path, jobdir, jobtype, args.iidx))
+
+				sys.exit()
+
 			for i in range(jobnums[i]):
 				jobname = '%s%d' % (jobtype, i)
 				sbname = '%s/sbatch_%s.sh' % (jobdir, jobname)
@@ -129,10 +142,16 @@ if __name__ == '__main__':
 					
 				# Change permissions
 				os.system('chmod u+x %s' % sbname)
-				if not args.test:
-					if not args.first_only or i == 0:
-						# Submit the job
-						os.system('sbatch %s ' % sbname)
+				# Launch the job interactively
+				if args.interactive and args.iidx == i:
+					os.system('python %s/eeg_corr.py %s %s %s %d'
+						% (script_dir, data_path, jobdir, jobtype, i))
+					break
+				else:
+					if not args.test:
+						if not args.first_only or i == 0:
+							# Submit the job
+							os.system('sbatch %s ' % sbname)
 
 	log_file.close()
 

@@ -52,7 +52,7 @@ valid_times = []
 if jobtype == 'channels' or jobtype == 'sources':
 
 	# An individual job only calaculates one row of the correlation block
-	corr_matrix = np.zeros((data.shape[2], data.shape[1], data.shape[1]))
+	corr_matrix = np.zeros((data.shape[2], data.shape[1], data.shape[1], 2))
 
 	# For each source node
 	for i in range(corr_matrix.shape[0]):
@@ -81,8 +81,26 @@ if jobtype == 'channels' or jobtype == 'sources':
 				valid_times[i][j][k].append(leading_nans)
 				valid_times[i][j][k].append(trailing_nans)
 
-				r2, p = pearsonr(x, y)
-				corr_matrix[i, j, k] = r2
+				# Calculate a correlation matrix based on a baseline prior to 
+				# t = 0 and the the basline after t = 0
+
+				# Currently make an arbitrary choice to use the first 50 time points after
+				# nan-removal and the last 50 points after nan-removal
+				x1 = x[:50]
+				x2 = x[-50:]
+
+				y1 = y[:50]
+				y2 = y[-50:]
+
+				r2_1, p = pearsonr(x1, y1)
+
+				r2_2, p = pearsonr(x2, y2)
+
+				corr_matrix[i, j, k, 0] = r2_1
+				corr_matrix[i, j, k, 1] = r2_2
+
+				# r2, p = pearsonr(x, y)
+				# corr_matrix[i, j, k] = r2
 		print(time.time() - start_time)
 
 else:

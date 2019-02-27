@@ -59,4 +59,4 @@ def count_leading_trailing_true(arr):
 		else:
 			break
 
-	return lead_count, trail_count
+	return int(lead_count), int(trail_count)

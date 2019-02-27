@@ -96,6 +96,9 @@ if jobtype == 'channels' or jobtype == 'sources':
 
 				r2_2, p = pearsonr(x2, y2)
 
+				if (i == jobindex) and (j == k) and (r2_1 != 1 or r2_2 != 1):
+					print("WARNING!!!!!!!!!!!!!!!!!!!!!!!!!")
+
 				corr_matrix[i, j, k, 0] = r2_1
 				corr_matrix[i, j, k, 1] = r2_2
 

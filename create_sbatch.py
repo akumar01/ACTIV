@@ -110,7 +110,7 @@ if __name__ == '__main__':
 			# Run the job interactively rather than creating all the sbatch scripts
 			if args.interactive:
 				os.system('python %s/eeg_corr.py %s %s %s %d'
-				% (script_dir, data_path, jobdir, jobtype, args.iidx))
+				% (script_dir, data_path, jobdir, jobtype, int(args.iidx)))
 
 				sys.exit()
 
@@ -142,16 +142,10 @@ if __name__ == '__main__':
 					
 				# Change permissions
 				os.system('chmod u+x %s' % sbname)
-				# Launch the job interactively
-				if args.interactive and args.iidx == i:
-					os.system('python %s/eeg_corr.py %s %s %s %d'
-						% (script_dir, data_path, jobdir, jobtype, i))
-					break
-				else:
-					if not args.test:
-						if not args.first_only or i == 0:
-							# Submit the job
-							os.system('sbatch %s ' % sbname)
+				if not args.test:
+					if not args.first_only or i == 0:
+						# Submit the job
+						os.system('sbatch %s ' % sbname)
 
 	log_file.close()
 

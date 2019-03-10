@@ -360,6 +360,8 @@ def CCA_across_patients(data_files, alg = 'cca', freq_clustering = 'cannonical',
                     elif band == 'gamma':
                         pre_stim = pre_stim[:, :, 26::]
                         post_stim = post_stim[:, :, 26::]
+                    elif band == 'all':
+                        pass
 
                 # Collpase and append
                 if pre_stim_feature_vector.size == 0:

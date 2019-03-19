@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
 	parser.add_argument('jobdir', default = None)
 
-	parser.add_argument('-jt', '--job_time', default='00:30:00')
+	parser.add_argument('-jt', '--job_time', default='04:00:00')
 
 	# First only: Submit only the first job
 	# Test: Create all files/folders but do not submit any of the jobs
@@ -56,7 +56,7 @@ if __name__ == '__main__':
 	hostname = subprocess.check_output(['hostname'])
 
 	# Hard-coded parameters
-	chunk_size = 15
+	chunk_size = 5
 
 	# N pairs
 	n_pairs = 2550
@@ -65,12 +65,12 @@ if __name__ == '__main__':
 
 	for i in range(n_jobs):			
 
-		arg_string = '%s --save_path=%s --chunk_size=%d --pair_index=%d' 
+		arg_string = '%s --save_path=%s --chunk_size=%d --pair_index=%d'\
 		% (data_path, jobdir, chunk_size, i)
 
 		# Run the job interactively rather than creating all the sbatch scripts
 		if args.interactive:
-			if i == args.iidx
+			if i == args.iidx:
 				os.system('python %s/run_cca.py %s' % (script_dir, arg_string))
 				sys.exit()
 			else:
@@ -95,8 +95,8 @@ if __name__ == '__main__':
 				if 'cori'.encode() in hostname:
 					sb.write('#SBATCH -C haswell')				
 
-				sb.write('source activate nse')
-
+				sb.write('source activate nse\n')
+				sb.write('srun python -u %s/run_cca.py %s' % (script_dir, arg_string))
 				sb.close()
 				
 			# Change permissions

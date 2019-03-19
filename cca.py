@@ -234,8 +234,12 @@ def cannonical_corr_analysis(data_file, window_sizes = [500], post_shifts = [0],
 # 'cannonical' groups by cannonical neuroscience bands
 # 'equal' groups by equally sized bins that are specified using bin_size
 # 'random' groups by random selections of bins of size given by bin_size
+# 'single_band': See whether individual cannonical bands predict themselves pre and post
+#  specify the band using the band argument
+# 'pairwise': Select individual pairs of bands pre and post stimulation. Specify the pair as a tuple
+# using the pair argument
 def CCA_across_patients(data_files, alg = 'cca', freq_clustering = 'cannonical', bin_size = 10,
-                        window_size = 500, post_shift = 0, pre_shift = 0, band = 'alpha'):
+                        window_size = 500, post_shift = 0, pre_shift = 0, band = 'alpha', pair = (1, 1)):
 
     # Assemble the set of feature vectors
 
@@ -362,6 +366,10 @@ def CCA_across_patients(data_files, alg = 'cca', freq_clustering = 'cannonical',
                         post_stim = post_stim[:, :, 26::]
                     elif band == 'all':
                         pass
+                elif freq_clustering == 'pairwise':
+
+                    pre_stim = pre_stim[:, :, pair[0]]
+                    post_stim = post_stim[:, :, pair[1]]
 
                 # Collpase and append
                 if pre_stim_feature_vector.size == 0:

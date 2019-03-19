@@ -383,7 +383,6 @@ def CCA_across_patients(data_files, alg = 'cca', freq_clustering = 'cannonical',
                     pre_stim_feature_vector = np.concatenate([pre_stim_feature_vector, pre_stim.reshape((1, -1))])
                     post_stim_feature_vector = np.concatenate([post_stim_feature_vector, post_stim.reshape((1, -1))])
                     
-    pdb.set_trace()
     # Convert to 32 bit floating precision
     pre_stim_feature_vector = pre_stim_feature_vector.astype(np.float32)
     post_stim_feature_vector = post_stim_feature_vector.astype(np.float32)

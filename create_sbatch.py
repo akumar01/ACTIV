@@ -22,29 +22,6 @@ if __name__ == '__main__':
 
 	parser.add_argument('jobdir', default = None)
 
-	# Name of data file to process
-	parser.add_argument('-d', '--datfile', default = None)
-
-	# c (channels): Calculate pairwise correlations between channels, averaged 
-	# over all frequencies
-
-	# fc (freq-channels): Calculate pairwise correlations between frequncies, 
-	# averaged over all channels
-
-	# fs (freq-sources): Calculate pairwise correlations between frequencies, 
-	# averaged over all sources
-
-	# s (sources): Calculate pairwise correlations between sources, averaged
-	# over all frequencies
-
-	# Level of parallelization: Each distinct job will calculate a single row
-	# of the corresponding correlation matrix
-
-	parser.add_argument('-c', '--channels', action = 'store_true')
-	parser.add_argument('-fc', '--freq-channels', action = 'store_true')
-	parser.add_argument('-fs', '--freq-sources', action = 'store_true')
-	parser.add_argument('-s', '--sources', action = 'store_true')
-
 	# Shouldn't need more than 30 minutes
 	parser.add_argument('-jt', '--job_time', default='00:30:00')
 
@@ -52,7 +29,6 @@ if __name__ == '__main__':
 	# Test: Create all files/folders but do not submit any of the jobs
 	parser.add_argument('-f', '--first_only', action = 'store_true')
 	parser.add_argument('-t', '--test', action = 'store_true')
-
 
 	# Interactive execution: Execute the job given by job_index interactively
 	# instead of submitting into the slurm queue
@@ -66,24 +42,7 @@ if __name__ == '__main__':
 
 	data_path = '/global/project/projectdirs/m2043/activ/stanfordEEG/DOEcollab_TMSEEGdata'
 
-	# Grab the first data file in the directory for testing purposes:
-	if args.datfile is None:
-		args.datfile = os.listdir(data_path)[0]
-
-	data_path = '%s/%s' % (data_path, args.datfile)
-
-	# ensure that data_file exists:
-	if not os.path.isfile(data_path):
-		raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), args.datfile)
-
-	# Get number of channels, sources, and frequencies:
-	with h5py.File(data_path, 'r') as f:
-		nchans = int(f['cfg_PAINT_cond']['channum'][0][0])
-		nsources = int(f['cfg_PAINT_cond']['sourcenum'][0][0])
-		nfreqs = int(f['cfg_PAINT_cond']['ERSPfreq'].size)
-
-	# Number of rows of the correlation matrix for the different job types
-	jobnums = [nchans, nfreqs, nfreqs, nchans]
+	save_path = '/global/project/projectdirs/m2043/akumar/ACTIV/pairwise_pls'
 
 	jobdir = '/global/project/projectdirs/m2043/akumar/ACTIV/correlations'
 

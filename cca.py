@@ -31,8 +31,6 @@ else:
         if '..\\mars\\mars\\signal_processing' not in sys.path:
             sys.path.append('..\\mars\\mars\\signal_processing')
 
-import hilbert_transform
-
 # Calculate the Hilbert transform to use both amplitude and phase in 
 # cannonical correlation analysis
 def calc_hilbert_transform(file_obj):
@@ -364,6 +362,9 @@ def CCA_across_patients(data_files, alg = 'cca', freq_clustering = 'cannonical',
                     elif band == 'gamma':
                         pre_stim = pre_stim[:, :, 26::]
                         post_stim = post_stim[:, :, 26::]
+                    elif band == 'topgamma':
+                        pre_stim = pre_stim[:, :, 41:51]
+                        post_stim = post_stim[:, :, 41:51] 
                     elif band == 'all':
                         pass
                 elif freq_clustering == 'pairwise':
@@ -382,7 +383,7 @@ def CCA_across_patients(data_files, alg = 'cca', freq_clustering = 'cannonical',
                     pre_stim_feature_vector = np.concatenate([pre_stim_feature_vector, pre_stim.reshape((1, -1))])
                     post_stim_feature_vector = np.concatenate([post_stim_feature_vector, post_stim.reshape((1, -1))])
                     
-
+    pdb.set_trace()
     # Convert to 32 bit floating precision
     pre_stim_feature_vector = pre_stim_feature_vector.astype(np.float32)
     post_stim_feature_vector = post_stim_feature_vector.astype(np.float32)

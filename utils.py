@@ -68,12 +68,12 @@ def fix_adjacency_matrix(arr):
 	major_size = np.max(arr.shape)
 	minor_size = np.min(arr.shape)
 
-    fixed_arr = np.zeros((major_size, major_size))
+	fixed_arr = np.zeros((major_size, major_size))
 
 	for i in range(major_size):
 		# Select the rows (columns) corresponding to the ith column (row) and 
 		# insert a 0 at the ith index
-		vec = np.take(arr, i, dim = major_dim)
+		vec = np.take(arr, i, axis = major_dim)
 
 		# Insert zeros
 		vec = np.insert(vec, i, 0)
